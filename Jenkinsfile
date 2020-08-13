@@ -22,7 +22,7 @@ pipeline {
 		    sh 'py.test --junit-xml test-reports/result.xml sources/test_calc.py'
 	    }
 	    post {
-		 awlays {
+		 always {
 			junit 'test-reports/results.xml'
 		 }
 	     }
