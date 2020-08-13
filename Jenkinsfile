@@ -17,15 +17,16 @@ pipeline {
 	    	docker {
 		    image 'qnib/pytest'
 		}
-		steps {
+	    } 	
+	    steps {
 		    sh 'py.test --junit-xml test-reports/result.xml sources/test_calc.py'
-		}
-		post {
-		    awlays {
-			junit 'test-reports/results.xml'
-		    }
-		}
 	    }
+	    post {
+		 awlays {
+			junit 'test-reports/results.xml'
+		 }
+	     }
 	}
     }
 }
+
