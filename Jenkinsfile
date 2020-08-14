@@ -50,7 +50,8 @@ pipeline {
 		// sh 'docker image push $registry:$BUILD_NUMBER'
 		// sh "docker image rm $registry:$BUILD_NUMBER"
 		}
-		
+	     }
+	     script {			
 		node {
 
     		    docker.withRegistry('https://hub.docker.com', 'dockerhub') {
