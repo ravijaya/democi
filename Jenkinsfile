@@ -58,7 +58,7 @@ pipeline {
         	        def customImage = docker.build("${registry}:${env.BUILD_ID}")
 
         	        /* Push the container to the custom Registry */
-        	        customImage.push(${env.BUILD_ID})
+        	        customImage.push()
                     }
                   }
 	     }
@@ -68,9 +68,9 @@ pipeline {
 		   sh "pwd"	
 		   sh "ls ${env.BUILD_ID}/sources/dist/add2vals"	
 		   //sh "docker run --rm -v ${VOLUME} ${IMAGE} 'rm -rf build dist'"
-		      //archiveArtifacts "${env.BUILD_ID}/sources/dist/add2vals"
-		      sh "docker run --rm -v ${VOLUME} ${IMAGE} 'rm -rf build dist'"
-		   }
+		   //archiveArtifacts "${env.BUILD_ID}/sources/dist/add2vals"
+		   sh "docker run --rm -v ${VOLUME} ${IMAGE} 'rm -rf build dist'"
+		 }
 		
 	      }
 				
