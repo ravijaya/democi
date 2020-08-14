@@ -43,6 +43,7 @@ pipeline {
 		dir(path: env.BUILD_ID) {
 		    unstash(name: 'compiled-results')
 		    sh "docker run --rm -v ${VOLUME} ${IMAGE} 'pyinstaller -F add2vals.py'"	
+		    stash(name: 'executable', includes: 'sources/dist/add2vals')
 	        
 		
 		// sh 'docker image build -t $registry:$BUILD_NUMBER .'
@@ -52,6 +53,7 @@ pipeline {
 		}
 
 		script {
+		    unstash(name: 'executable')
     		    docker.withRegistry('', 'dockerhub') {
         	        def customImage = docker.build("${registry}:${env.BUILD_ID}")
 
