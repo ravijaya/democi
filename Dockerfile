@@ -1,3 +1,4 @@
 FROM scratch
-ADD ./sources/dist/add2vals /
+RUN cd sources/dist/
+ADD add2vals /
 CMD ["/add2vals"]
