@@ -33,7 +33,7 @@ pipeline {
 		 }
 	     }
 	}
-	stage('Delive') {
+	stage('Deliver') {
 	    agent any 
             environment {
 		VOLUME = '$(pwd)/sources:/src'
@@ -51,8 +51,13 @@ pipeline {
 		// sh "docker image rm $registry:$BUILD_NUMBER"
 		}
 	     }
+             post {
+		success {
+		   archiveArtifacts "${env.BUILD_ID}/sources/dist/add2vals"
+		   //sh "docker run --rm -v ${VOLUME} ${IMAGE} 'rm -rf build dist'"
+		}
 	}
-	stage('Push Images') {
+	stage('Pushing Images') {
 				
 		steps {
 		  script {
@@ -68,7 +73,7 @@ pipeline {
 	    
             post {
 		success {
-		   archiveArtifacts "${env.BUILD_ID}/sources/dist/add2vals"
+		   //archiveArtifacts "${env.BUILD_ID}/sources/dist/add2vals"
 		   sh "docker run --rm -v ${VOLUME} ${IMAGE} 'rm -rf build dist'"
 		}
 		
