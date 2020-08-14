@@ -1,9 +1,4 @@
 pipeline {
-    environment {
-        registry = "ravijaya/add2vals"
-        DOCKER_PWD = credentials('docker-login-pwd')
-    }
-
     agent none 
     stages {
         stage('Build') {
@@ -32,7 +27,7 @@ pipeline {
 		 }
 	     }
 	}
-	stage('Deliver & Push Docker image') {
+	stage('Deliver') {
 	    agent any 
             environment {
 		VOLUME = '$(pwd)/sources:/src'
@@ -44,12 +39,6 @@ pipeline {
 		    sh "docker run --rm -v ${VOLUME} ${IMAGE} 'pyinstaller -F add2vals.py'"	
 		}
 	    }
-	    steps {
-		sh 'docker image build -t $registry:$BUILD_NUMBER .'
-		sh 'docker login -u gnschenker -p $DOCKER_PWD'
-		sh 'docker image push $registry:$BUILD_NUMBER'
-		sh "docker image rm $registry:$BUILD_NUMBER"
-	    }	
             post {
 		success {
 		   archiveArtifacts "${env.BUILD_ID}/sources/dist/add2vals"
