@@ -50,16 +50,8 @@ pipeline {
 		// sh 'docker image push $registry:$BUILD_NUMBER'
 		// sh "docker image rm $registry:$BUILD_NUMBER"
 		}
-	     }
-             post {
-		success {
-		   archiveArtifacts "${env.BUILD_ID}/sources/dist/add2vals"
-		   sh "pwd"	
-		   sh "ls ${env.BUILD_ID}/sources/dist/add2vals"	
-		   //sh "docker run --rm -v ${VOLUME} ${IMAGE} 'rm -rf build dist'"
-		}
-		script {
 
+		script {
     		    docker.withRegistry('', 'dockerhub') {
         	        def customImage = docker.build("${registry}:${env.BUILD_ID}")
 
@@ -67,8 +59,13 @@ pipeline {
         	        customImage.push()
                     }
                   }
-	    
-		  success {
+	     }
+             post {
+		success {
+		   archiveArtifacts "${env.BUILD_ID}/sources/dist/add2vals"
+		   sh "pwd"	
+		   sh "ls ${env.BUILD_ID}/sources/dist/add2vals"	
+		   //sh "docker run --rm -v ${VOLUME} ${IMAGE} 'rm -rf build dist'"
 		      //archiveArtifacts "${env.BUILD_ID}/sources/dist/add2vals"
 		      sh "docker run --rm -v ${VOLUME} ${IMAGE} 'rm -rf build dist'"
 		   }
