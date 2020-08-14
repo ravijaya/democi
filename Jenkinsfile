@@ -1,7 +1,8 @@
 pipeline {
     environment {
         registry = "ravijaya/add2vals"
-        DOCKER_PWD = credentials('docker-login-pwd')
+	dockerImage = ''
+        //DOCKER_PWD = "dockerhub"
     }
 
     agent none 
@@ -42,12 +43,23 @@ pipeline {
 		dir(path: env.BUILD_ID) {
 		    unstash(name: 'compiled-results')
 		    sh "docker run --rm -v ${VOLUME} ${IMAGE} 'pyinstaller -F add2vals.py'"	
+	        
 		
-		sh 'docker image build -t $registry:$BUILD_NUMBER .'
-		sh 'docker login -u gnschenker -p $DOCKER_PWD'
-		sh 'docker image push $registry:$BUILD_NUMBER'
-		sh "docker image rm $registry:$BUILD_NUMBER"
+		#sh 'docker image build -t $registry:$BUILD_NUMBER .'
+		#sh 'docker login -u ravijaya -p $DOCKER_PWD'
+		#sh 'docker image push $registry:$BUILD_NUMBER'
+		#sh "docker image rm $registry:$BUILD_NUMBER"
 		}
+		
+		node {
+
+    		    docker.withRegistry('https://hub.docker.com', 'dockerhub') {
+        	        def customImage = docker.build("$(registry):${env.BUILD_ID}")
+
+        	        /* Push the container to the custom Registry */
+        	        customImage.push()
+                    }
+                }
 	    }	
             post {
 		success {
