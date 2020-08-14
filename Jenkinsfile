@@ -58,16 +58,7 @@ pipeline {
 		   sh "ls ${env.BUILD_ID}/sources/dist/add2vals"	
 		   //sh "docker run --rm -v ${VOLUME} ${IMAGE} 'rm -rf build dist'"
 		}
-	     }	
-	}
-	stage('Pushing Images') {
-				
-		node {
-		steps {
-
-		dir(path: env.BUILD_ID) {
-
-		  script {
+		script {
 
     		    docker.withRegistry('', 'dockerhub') {
         	        def customImage = docker.build("${registry}:${env.BUILD_ID}")
@@ -76,19 +67,15 @@ pipeline {
         	        customImage.push()
                     }
                   }
-		}
-		}	
-                }
 	    
-            post {
-		success {
-		   //archiveArtifacts "${env.BUILD_ID}/sources/dist/add2vals"
-		   sh "docker run --rm -v ${VOLUME} ${IMAGE} 'rm -rf build dist'"
-		}
+		  success {
+		      //archiveArtifacts "${env.BUILD_ID}/sources/dist/add2vals"
+		      sh "docker run --rm -v ${VOLUME} ${IMAGE} 'rm -rf build dist'"
+		   }
 		
-	    }
+	      }
 				
-	}
+	 }
 	
     }
 }
