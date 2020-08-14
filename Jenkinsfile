@@ -54,7 +54,7 @@ pipeline {
 	}
 	stage('Push Images') {
 			
-		node {
+		steps {
 
     		    docker.withRegistry('https://hub.docker.com', 'dockerhub') {
         	        def customImage = docker.build("${registry}:${env.BUILD_ID}")
