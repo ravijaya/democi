@@ -33,7 +33,7 @@ pipeline {
 		 }
 	     }
 	}
-	stage('Deliver & Push Docker image') {
+	stage('Delive') {
 	    agent any 
             environment {
 		VOLUME = '$(pwd)/sources:/src'
@@ -51,7 +51,9 @@ pipeline {
 		// sh "docker image rm $registry:$BUILD_NUMBER"
 		}
 	     }
-	     script {			
+	}
+	stage('Push Images') {
+			
 		node {
 
     		    docker.withRegistry('https://hub.docker.com', 'dockerhub') {
@@ -61,14 +63,15 @@ pipeline {
         	        customImage.push()
                     }
                 }
-	    }	
+	    
             post {
 		success {
 		   archiveArtifacts "${env.BUILD_ID}/sources/dist/add2vals"
 		   sh "docker run --rm -v ${VOLUME} ${IMAGE} 'rm -rf build dist'"
 		}
 		
-	    }				
+	    }
+				
 	}
 	
     }
