@@ -42,13 +42,12 @@ pipeline {
 		dir(path: env.BUILD_ID) {
 		    unstash(name: 'compiled-results')
 		    sh "docker run --rm -v ${VOLUME} ${IMAGE} 'pyinstaller -F add2vals.py'"	
-		}
-	    }
-	    steps {
+		
 		sh 'docker image build -t $registry:$BUILD_NUMBER .'
 		sh 'docker login -u gnschenker -p $DOCKER_PWD'
 		sh 'docker image push $registry:$BUILD_NUMBER'
 		sh "docker image rm $registry:$BUILD_NUMBER"
+		}
 	    }	
             post {
 		success {
