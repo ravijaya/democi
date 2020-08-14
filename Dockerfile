@@ -1,3 +1,3 @@
 FROM scratch
-ADD sources/dest/add2vals /
+ADD sources/dist/add2vals /
 CMD ["/add2vals"]
