@@ -63,8 +63,8 @@ pipeline {
 	stage('Pushing Images') {
 				
 		steps {
-		   sh "pwd"	
-		   sh "ls ${env.BUILD_ID}/sources/dist/add2vals"	
+		dir(path: env.BUILD_ID) {
+
 		  script {
 
     		    docker.withRegistry('', 'dockerhub') {
@@ -74,6 +74,7 @@ pipeline {
         	        customImage.push()
                     }
                   }
+		}	
                 }
 	    
             post {
