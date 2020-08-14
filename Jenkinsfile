@@ -63,6 +63,7 @@ pipeline {
 	stage('Pushing Images') {
 				
 		steps {
+		node {
 		dir(path: env.BUILD_ID) {
 
 		  script {
@@ -74,6 +75,7 @@ pipeline {
         	        customImage.push()
                     }
                   }
+		}
 		}	
                 }
 	    
